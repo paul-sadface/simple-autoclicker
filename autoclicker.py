@@ -14,8 +14,9 @@ class autoclicker():
         frame.grid(column=0, row=0)
         root.geometry("500x300")
         ttk.Label(frame, text="Autoclicker Program",).grid(column=0, row=0)
-        ttk.Entry()
+        ttk.Entry(frame, textvariable="abc").grid(column=0, row=2)
         ttk.Button(frame, text="Close", command=root.destroy).grid(column=0, row=1)
+        root.columnconfigure(0, weight=1)
         root.mainloop()
 
 
