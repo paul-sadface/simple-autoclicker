@@ -11,11 +11,26 @@ class autoclicker():
         self.root = None
         self.listener = keyboard.Listener(on_press=self.on_press)
         self.mouse_controller = mouse.Controller()
+        self.delay = None
         
 
-    def get_frequency(self):
-        self.frequency = self.frequency_string.get()
-        self.ui_feedback_label.configure(text="success")
+    def get_delay(self):
+        try:
+            self.delay = self.delay_string.get()
+            self.ui_feedback_label.configure(text="success")
+        except ValueError:
+            self.ui_feedbacl_label.configure(text="invalid input")
+
+    def toggle_autoclicker(self):
+        self.is_paused = not self.is_paused
+        while not self.is_paused:
+            self.autoclick()
+            self.root.after(int(self.delay * 1000), self.autoclick())
+
+    def autoclick(self):
+        if not self.is_paused:
+            self.mouse_controller.click(mouse.Button.left)
+
 
     def create_window(self):
         self.root = Tk()
@@ -23,13 +38,13 @@ class autoclicker():
         frame = ttk.Frame(self.root, padding=20)
         frame.grid(column=0, row=0)
         self.root.geometry("500x300")
-        self.frequency_string = StringVar(self.root)
+        self.delay_string = StringVar(self.root)
 
         self.ui_label = ttk.Label(frame, text="Autoclicker Program", font=15)
         self.ui_label.grid(column=0, row=0)
-        self.ui_entry = ttk.Entry(frame, textvariable=self.frequency_string)
+        self.ui_entry = ttk.Entry(frame, textvariable=self.delay_string)
         self.ui_entry.grid(column=0, row=1, pady=30)
-        self.ui_runbutton = ttk.Button(frame, text="Run", command=self.get_frequency)
+        self.ui_runbutton = ttk.Button(frame, text="Set Delay", command=self.get_delay)
         self.ui_runbutton.grid(column=0, row=2, pady=20)
         self.ui_feedback_label = ttk.Label(frame, text="", font=15)
         self.ui_feedback_label.grid(column=0, row=3, pady = 20)
@@ -43,9 +58,8 @@ class autoclicker():
         self.listener.stop()
     
     def on_press(self, key):
-        if key == keyboard.Key.f1:
-            print("pressed f1")
-            self.mouse_controller.click(mouse.Button.left, 1)
+        if key == keyboard.Key.f9:
+            self.toggle_autoclicker()
             
 
 def main():
