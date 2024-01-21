@@ -23,12 +23,12 @@ class autoclicker():
 
     def toggle_autoclicker(self):
         self.is_paused = not self.is_paused
-        while not self.is_paused:
+        while self.is_paused == False:
             self.autoclick()
-            self.root.after(int(self.delay * 1000), self.autoclick())
+            time.sleep(int(self.delay))
 
     def autoclick(self):
-        if not self.is_paused:
+        if self.is_paused == False:
             self.mouse_controller.click(mouse.Button.left)
 
 
