@@ -19,17 +19,22 @@ class autoclicker():
             self.delay = self.delay_string.get()
             self.ui_feedback_label.configure(text="success")
         except ValueError:
-            self.ui_feedbacl_label.configure(text="invalid input")
+            self.ui_feedback_label.configure(text="invalid input")
 
     def toggle_autoclicker(self):
         self.is_paused = not self.is_paused
+        if self.is_paused == True:
+            self.ui_paused.configure(text="paused")
+        else:
+            self.ui_paused.configure(text="running")
+
         while self.is_paused == False:
             self.autoclick()
             time.sleep(int(self.delay))
 
     def autoclick(self):
         if self.is_paused == False:
-            self.mouse_controller.click(mouse.Button.left)
+            self.mouse_controller.click(mouse.Button.left, count=1)
 
 
     def create_window(self):
@@ -47,7 +52,9 @@ class autoclicker():
         self.ui_runbutton = ttk.Button(frame, text="Set Delay", command=self.get_delay)
         self.ui_runbutton.grid(column=0, row=2, pady=20)
         self.ui_feedback_label = ttk.Label(frame, text="", font=15)
-        self.ui_feedback_label.grid(column=0, row=3, pady = 20)
+        self.ui_feedback_label.grid(column=0, row=3, pady = 10)
+        self.ui_paused = ttk.Label(frame, text="paused", font=15)
+        self.ui_paused.grid(column=0, row=4)
         self.root.columnconfigure(0, weight=1)
         self.root.protocol("WM_DELETE_WINDOW", self.stop_autoclicker)
 
